@@ -1,6 +1,6 @@
 #include <LiquidCrystal.h>
 
-const char *SECRET = "apple badge pen flag pocket time school";
+const char *SECRET = "demo seed phrase";
 const int TRIGGER_PIN = 8;
 
 // LCD: (rs, enable, d4, d5, d6, d7)
@@ -21,16 +21,18 @@ void setup() {
 int unlocked = 0;
 void unlock(){
   delay(500);
+  Serial.print("Welcome back trusted user!");
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Unlocked!");
+  // This wallet is completely empty and were generated for this challenge
+  lcd.print(" BTC: 1EdcxBwCCnFEnHrhDmVQ9vvk8wwksfDD8w");
   lcd.setCursor(0, 1);
-  lcd.print("Balance:1337 BTC");
-  Serial.print("You unlocked the wallet!");
+  lcd.print(" SECRET: L1faYUqikWEo4cWMbRAY2vanGCmMZJ1AhjP4TJTHrwYuXj4wkQ2U");
+  while(1){delay(500);lcd.scrollDisplayLeft();}
 }
 
 void loop() {
-  static char buffer[40];
+  static char buffer[32];
   static int idx = 0;
 
   while (Serial.available()) {
@@ -46,10 +48,6 @@ void loop() {
 
       if (ok) {
         lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Unlocked!");
-        lcd.setCursor(0, 1);
-        lcd.print("Balance:1337 BTC");
         Serial.print("1");
         unlocked = 1;
       } else {
