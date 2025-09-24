@@ -1,7 +1,8 @@
 #include <LiquidCrystal.h>
+#define TRIGGER_PIN = 8
 
-const char *SECRET = "demo seed phrase";
-const int TRIGGER_PIN = 8;
+const char secret[17] = "demo seed phrase";
+int unlocked = 0;
 
 // LCD: (rs, enable, d4, d5, d6, d7)
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
@@ -18,7 +19,6 @@ void setup() {
   lcd.print("Enter seed >>");
 }
 
-int unlocked = 0;
 void unlock(){
   delay(500);
   Serial.print("Welcome back trusted user!");
@@ -32,14 +32,13 @@ void unlock(){
 }
 
 void loop() {
-  static char buffer[32];
+  static char buffer[17];
   static int idx = 0;
-
+  
   while (Serial.available()) {
     char c = Serial.read();
     if (c == '\n' || c == '\r') {
       buffer[idx] = '\0';
-      idx = 0;
 
       digitalWrite(TRIGGER_PIN, HIGH);
       digitalWrite(TRIGGER_PIN, LOW);
@@ -58,9 +57,12 @@ void loop() {
         lcd.print("Please try again");
         Serial.print("0");
       }
+      idx = 0;
+    } else if (idx < 17){
+      buffer[idx++] = c;
     }
   }
-  if(unlocked){
+  if (unlocked){
     unlock();
   }
 }
