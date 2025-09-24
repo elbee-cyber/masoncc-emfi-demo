@@ -1,5 +1,5 @@
 #include <LiquidCrystal.h>
-#define TRIGGER_PIN = 8
+#define TRIGGER_PIN 8
 
 const char secret[17] = "demo seed phrase";
 int unlocked = 0;
